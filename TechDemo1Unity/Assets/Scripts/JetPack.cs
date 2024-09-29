@@ -14,13 +14,17 @@ public class JetPack : MonoBehaviour
 
 	public float TimeToAllowUse = 0.1f;
 
-	public AudioSource jetPackAudioSource;
+	public AudioSource jetPackBeepAudioSource;
 
 	public AudioClip jetPackBeep;
 
 	public JetPackGuage jetPackGuage;
 
 	public float BeepInterval = 0.2f;
+
+	public AudioSource jetPackAudioSource;
+
+	public bool UsingJetPack = false;
 
 
 
@@ -42,6 +46,8 @@ public class JetPack : MonoBehaviour
 		fuel = MaxFuel;
 
 		jetPackGuage.MaxTankSize = MaxFuel;
+
+		jetPackAudioSource.loop = true;
 	}
 
 	// Update is called once per frame
@@ -64,35 +70,56 @@ public class JetPack : MonoBehaviour
 			countDown -= Time.deltaTime;
 		}
 
-		if (CanUseJetPack && countDown <= 0)
+		if ((CanUseJetPack && countDown <= 0) || UsingJetPack)
 		{
 			allowedToUseJetPack = true;
+
+
+
 		}
 		else if (!CanUseJetPack)
 		{
 			allowedToUseJetPack = false;
+
+
 		}
 
-		// to here
-		// done at 3am :3
+
+		if (beepDelay >= 0)
+		{
+			beepDelay -= Time.deltaTime;
+
+		}
+		else if (fuel < MaxFuel * 0.25f && beepDelay <= 0 && allowedToUseJetPack && fuel > 0)
+		{
+			beepDelay = Mathf.Lerp(0.1f, BeepInterval, fuel / (MaxFuel * 0.25f));
+
+			jetPackBeepAudioSource.PlayOneShot(jetPackBeep);
+		}
+
 
 
 		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
-			attachedRigidBody.AddForce(transform.up * ForceOfJetPack, ForceMode2D.Force);
+			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Force);
 
 			fuel -= Time.deltaTime * FuelUsageRate;
 
-			if (fuel < MaxFuel * 0.25f && beepDelay <= 0)
-			{
-				beepDelay = Mathf.Lerp(0.1f, BeepInterval, fuel / (MaxFuel * 0.25f));
-				jetPackAudioSource.PlayOneShot(jetPackBeep);
-			}
-			else if (beepDelay >= 0)
-			{
-				beepDelay -= Time.deltaTime;
-			}
+
+
+			if (!jetPackAudioSource.isPlaying) jetPackAudioSource.Play();
+
+			UsingJetPack = true;
 		}
+		else
+		{
+			if (jetPackAudioSource.isPlaying) jetPackAudioSource.Stop();
+
+			UsingJetPack = false;
+		}
+
+
+
 
 		jetPackGuage.TankFill = fuel;
 
