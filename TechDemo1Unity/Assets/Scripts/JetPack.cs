@@ -14,8 +14,15 @@ public class JetPack : MonoBehaviour
 
 	public float TimeToAllowUse = 0.1f;
 
+	public AudioSource jetPackAudioSource;
+
+	public AudioClip jetPackBeep;
 
 	public JetPackGuage jetPackGuage;
+
+	public float BeepInterval = 0.2f;
+
+
 
 	private Rigidbody2D attachedRigidBody;
 
@@ -24,6 +31,8 @@ public class JetPack : MonoBehaviour
 	private bool allowedToUseJetPack = false;
 
 	private float countDown = 0f;
+
+	private float beepDelay = 0;
 
 	// Start is called before the first frame update
 	void Start()
@@ -73,6 +82,16 @@ public class JetPack : MonoBehaviour
 			attachedRigidBody.AddForce(transform.up * ForceOfJetPack, ForceMode2D.Force);
 
 			fuel -= Time.deltaTime * FuelUsageRate;
+
+			if (fuel < MaxFuel * 0.25f && beepDelay <= 0)
+			{
+				beepDelay = Mathf.Lerp(0.1f, BeepInterval, fuel / (MaxFuel * 0.25f));
+				jetPackAudioSource.PlayOneShot(jetPackBeep);
+			}
+			else if (beepDelay >= 0)
+			{
+				beepDelay -= Time.deltaTime;
+			}
 		}
 
 		jetPackGuage.TankFill = fuel;

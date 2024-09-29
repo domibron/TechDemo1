@@ -24,6 +24,8 @@ public class JetPackGuage : MonoBehaviour
 
 	private bool blinkingLight = false;
 
+	private float blinkDelay = 0f;
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -40,6 +42,11 @@ public class JetPackGuage : MonoBehaviour
 		if (!blinkingLight && LowFuel && TankFill > 0)
 		{
 			StartCoroutine(BlinkLight());
+		}
+
+		if (blinkingLight && TankFill > 0 && TankFill < MaxTankSize * 0.25f)
+		{
+			blinkDelay = Mathf.Lerp(0.1f, BlinkInterval, TankFill / (MaxTankSize * 0.25f));
 
 		}
 
@@ -57,9 +64,9 @@ public class JetPackGuage : MonoBehaviour
 
 		while (blinkingLight)
 		{
-			yield return new WaitForSeconds(BlinkInterval);
+			yield return new WaitForSeconds(blinkDelay);
 			LightImage.sprite = LightOnSprite;
-			yield return new WaitForSeconds(BlinkInterval);
+			yield return new WaitForSeconds(blinkDelay);
 			LightImage.sprite = LightOffSprite;
 		}
 
