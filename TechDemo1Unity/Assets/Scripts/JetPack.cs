@@ -97,7 +97,7 @@ public class JetPack : MonoBehaviour
 			jetPackBeepAudioSource.PlayOneShot(jetPackBeep);
 		}
 
-
+		
 
 		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
