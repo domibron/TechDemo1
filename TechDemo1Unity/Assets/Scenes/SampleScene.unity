@@ -155,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 35, y: 35}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &155834525
 MonoBehaviour:
@@ -335,7 +335,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: dcd44ff19b3671d40b9d35e2bf45e45f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1066,6 +1066,7 @@ MonoBehaviour:
   jetPackGuage: {fileID: 730935228}
   BeepInterval: 0.5
   jetPackAudioSource: {fileID: 1866290385}
+  UsingJetPack: 0
 --- !u!212 &817378226
 SpriteRenderer:
   m_ObjectHideFlags: 0
