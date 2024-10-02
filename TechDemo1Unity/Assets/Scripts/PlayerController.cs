@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
 	private bool isGrounded = false;
 
 
+	private Animator animator;
+
+	private SpriteRenderer spriteRenderer;
+
 
 	void Start()
 	{
@@ -26,6 +30,9 @@ public class PlayerController : MonoBehaviour
 
 		jetPack = GetComponent<JetPack>();
 
+		animator = GetComponent<Animator>();
+
+		spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
 
@@ -55,6 +62,23 @@ public class PlayerController : MonoBehaviour
 		HandleJumping();
 
 		PassPlayerPositionToCameraMovement();
+
+		HandleAnimations(InputVector);
+	}
+
+	private void HandleAnimations(Vector2 InputVector)
+	{
+		animator.SetBool("IsMoving", InputVector.magnitude != 0);
+
+		if (InputVector.x < 0)
+		{
+			spriteRenderer.flipX = true;
+		}
+		else if (InputVector.x > 0)
+		{
+			spriteRenderer.flipX = false;
+		}
+
 	}
 
 	private void PassPlayerPositionToCameraMovement()
