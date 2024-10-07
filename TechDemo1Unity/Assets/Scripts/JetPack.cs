@@ -29,6 +29,7 @@ public class JetPack : MonoBehaviour
 
 
 	private Rigidbody2D attachedRigidBody;
+	private PlayerController playerController;
 
 	private float fuel;
 
@@ -42,6 +43,8 @@ public class JetPack : MonoBehaviour
 	void Start()
 	{
 		attachedRigidBody = GetComponent<Rigidbody2D>();
+
+		playerController = GetComponent<PlayerController>();
 
 		fuel = MaxFuel;
 
@@ -97,11 +100,13 @@ public class JetPack : MonoBehaviour
 			jetPackBeepAudioSource.PlayOneShot(jetPackBeep);
 		}
 
-		
+
 
 		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
 			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Force);
+
+			playerController.NewVelocityForFrame += (Vector2)transform.up * ForceOfJetPack;
 
 			fuel -= Time.deltaTime * FuelUsageRate;
 

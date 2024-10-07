@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,10 @@ public class PlayerController : MonoBehaviour
 
 	public float JumpForce = 10f;
 
+	public Vector2 VelocityForFrame;
+	public Vector2 NewVelocityForFrame;
+
+	public bool IgnoreRBVelocity = false;
 
 	private Rigidbody2D attachedRigidBody;
 
@@ -39,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-
+		NewVelocityForFrame = Vector2.zero;
 
 		if (CameraMovement.Instance.CameraIsMoving)
 		{
@@ -53,6 +58,8 @@ public class PlayerController : MonoBehaviour
 
 		isGrounded = CheckIfGrounded();
 
+		// HandleGravity();
+
 		jetPack.CanUseJetPack = !isGrounded;
 
 		Vector2 InputVector = GetInputAsVector2();
@@ -64,7 +71,29 @@ public class PlayerController : MonoBehaviour
 		PassPlayerPositionToCameraMovement();
 
 		HandleAnimations(InputVector);
+
+		VelocityForFrame = NewVelocityForFrame;
 	}
+
+	// private void HandleGravity()
+	// {
+	// 	Vector2 gravForce = Vector2.zero;
+
+	// 	if (!isGrounded)
+	// 	{
+	// 		gravForce = new Vector2(0, Physics2D.gravity.y);
+	// 	}
+	// 	else if (isGrounded && attachedRigidBody.velocity.y > -2f)
+	// 	{
+	// 		gravForce = new Vector2(0, -2f);
+	// 	}
+
+	// 	gravForce *= 1f;
+
+	// 	NewVelocityForFrame += gravForce;
+
+	// 	attachedRigidBody.AddForce(gravForce);
+	// }
 
 	private void HandleAnimations(Vector2 InputVector)
 	{
@@ -97,10 +126,12 @@ public class PlayerController : MonoBehaviour
 			if (counterGrav.y > 0) counterGrav.y = 0;
 			else
 			{
-				counterGrav.y = +counterGrav.y;
+				counterGrav.y = MathF.Abs(counterGrav.y);
 			}
 
+			// if (!IgnoreRBVelocity) 
 			attachedRigidBody.AddForce(new Vector2(0, JumpForce) + counterGrav, ForceMode2D.Impulse);
+			NewVelocityForFrame += new Vector2(0, JumpForce) + counterGrav;
 		}
 	}
 
@@ -114,17 +145,33 @@ public class PlayerController : MonoBehaviour
 		Vector2 forceToApply = new Vector2();
 
 
-		if (InputVector.x != 0)
+		if (InputVector.x != 0 && !IgnoreRBVelocity)
 		{
 			forceToApply = ((new Vector2(InputVector.normalized.x, 0) * MaxSpeed) - new Vector2(attachedRigidBody.velocity.x, 0)) * AccelRate;
 
 		}
-		else if (isGrounded)
+		else if (isGrounded && !IgnoreRBVelocity)
 		{
 			forceToApply = new Vector2(-attachedRigidBody.velocity.x, 0) * DeaccelRate;
 		}
 
 
+
+		// if (InputVector.x != 0 && IgnoreRBVelocity)
+		// {
+		// 	forceToApply = ((new Vector2(InputVector.normalized.x, 0) * MaxSpeed) - new Vector2(VelocityForFrame.x, 0)) * AccelRate;
+
+		// }
+		// else if (isGrounded && IgnoreRBVelocity)
+		// {
+		// 	forceToApply = new Vector2(-VelocityForFrame.x, 0) * DeaccelRate;
+		// }
+
+
+
+		NewVelocityForFrame += forceToApply;
+
+		// if (!IgnoreRBVelocity) 
 		attachedRigidBody.AddForce(forceToApply);
 	}
 
