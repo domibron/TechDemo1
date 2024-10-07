@@ -12,7 +12,7 @@ public class MovingPlatformParenting : MonoBehaviour
 
 	private bool hasPlayer = false;
 
-	private Vector3 oldPos;
+	// private Vector3 oldPos;
 
 	private Vector2 velocity;
 
@@ -21,7 +21,7 @@ public class MovingPlatformParenting : MonoBehaviour
 	{
 		movingPlatformSystem = GetComponentInParent<MovingPlatformSystem>();
 
-		oldPos = transform.localPosition;
+		// oldPos = transform.localPosition;
 	}
 
 	// Update is called once per frame
@@ -41,7 +41,7 @@ public class MovingPlatformParenting : MonoBehaviour
 		// 	velocity = Vector2.zero;
 		// }
 
-		print($"{playerRB.velocity} = {playerController.VelocityForFrame} + {movingPlatformSystem.Velocity}");
+		// print($"{playerRB.velocity} = {playerController.VelocityForFrame} + {movingPlatformSystem.Velocity}");
 
 		if (hasPlayer)
 		{
