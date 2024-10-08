@@ -40,7 +40,7 @@ public class CollapsablePlatforms : MonoBehaviour
 
 			float wave = (Mathf.Sin((countDown / WaitTime) * ShakeFrequancy) + 1) / 2f;
 
-			print(wave);
+			// print(wave);
 
 			transform.position = new Vector3(Mathf.Lerp(originalPos.x - ShakeAmmount, originalPos.x + ShakeAmmount, wave), transform.position.y, transform.position.z);
 		}

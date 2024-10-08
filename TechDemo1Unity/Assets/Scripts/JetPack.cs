@@ -27,7 +27,7 @@ public class JetPack : MonoBehaviour
 	public bool UsingJetPack = false;
 
 
-
+	private Animator playerAnimator;
 	private Rigidbody2D attachedRigidBody;
 	private PlayerController playerController;
 
@@ -42,6 +42,8 @@ public class JetPack : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		playerAnimator = GetComponent<Animator>();
+
 		attachedRigidBody = GetComponent<Rigidbody2D>();
 
 		playerController = GetComponent<PlayerController>();
@@ -123,7 +125,7 @@ public class JetPack : MonoBehaviour
 			UsingJetPack = false;
 		}
 
-
+		HandleAnimations();
 
 
 		jetPackGuage.TankFill = fuel;
@@ -132,5 +134,10 @@ public class JetPack : MonoBehaviour
 		{
 			jetPackGuage.LowFuel = true;
 		}
+	}
+
+	private void HandleAnimations()
+	{
+		playerAnimator.SetBool("IsFlying", UsingJetPack);
 	}
 }
