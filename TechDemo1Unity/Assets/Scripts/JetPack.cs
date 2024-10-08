@@ -104,7 +104,7 @@ public class JetPack : MonoBehaviour
 
 		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
-			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Force);
+			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Impulse);
 
 			playerController.NewVelocityForFrame += (Vector2)transform.up * ForceOfJetPack;
 

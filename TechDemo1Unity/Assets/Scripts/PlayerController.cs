@@ -15,8 +15,6 @@ public class PlayerController : MonoBehaviour
 	public Vector2 VelocityForFrame;
 	public Vector2 NewVelocityForFrame;
 
-	public bool IgnoreRBVelocity = false;
-
 	private Rigidbody2D attachedRigidBody;
 
 	private JetPack jetPack;
@@ -97,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
 	private void HandleAnimations(Vector2 InputVector)
 	{
-		animator.SetBool("IsMoving", InputVector.magnitude != 0);
+		animator.SetBool("IsMoving", InputVector.x != 0 && isGrounded);
 
 		if (InputVector.x < 0)
 		{
@@ -145,12 +143,12 @@ public class PlayerController : MonoBehaviour
 		Vector2 forceToApply = new Vector2();
 
 
-		if (InputVector.x != 0 && !IgnoreRBVelocity)
+		if (InputVector.x != 0)
 		{
 			forceToApply = ((new Vector2(InputVector.normalized.x, 0) * MaxSpeed) - new Vector2(attachedRigidBody.velocity.x, 0)) * AccelRate;
 
 		}
-		else if (isGrounded && !IgnoreRBVelocity)
+		else if (isGrounded)
 		{
 			forceToApply = new Vector2(-attachedRigidBody.velocity.x, 0) * DeaccelRate;
 		}
@@ -177,6 +175,6 @@ public class PlayerController : MonoBehaviour
 
 	private bool CheckIfGrounded()
 	{
-		return Physics2D.Raycast(transform.position, -transform.up, (GetComponent<BoxCollider2D>().size.y / 2f) + .5f, ~(1 << 3));
+		return Physics2D.Raycast(transform.position, -transform.up, (GetComponent<CapsuleCollider2D>().size.y / 2f) + .5f, ~(1 << 3));
 	}
 }
