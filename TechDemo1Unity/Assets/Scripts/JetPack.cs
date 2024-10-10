@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class JetPack : MonoBehaviour
 {
@@ -26,10 +27,12 @@ public class JetPack : MonoBehaviour
 
 	public bool UsingJetPack = false;
 
+	public Light2D light2D;
 
 	private Animator playerAnimator;
 	private Rigidbody2D attachedRigidBody;
 	private PlayerController playerController;
+	private SpriteRenderer spriteRenderer;
 
 	private float fuel;
 
@@ -38,6 +41,8 @@ public class JetPack : MonoBehaviour
 	private float countDown = 0f;
 
 	private float beepDelay = 0;
+
+	private Vector3 lightPos;
 
 	// Start is called before the first frame update
 	void Start()
@@ -48,11 +53,16 @@ public class JetPack : MonoBehaviour
 
 		playerController = GetComponent<PlayerController>();
 
+		spriteRenderer = GetComponent<SpriteRenderer>();
+
+		lightPos = light2D.transform.localPosition;
+
 		fuel = MaxFuel;
 
 		jetPackGuage.MaxTankSize = MaxFuel;
 
 		jetPackAudioSource.loop = true;
+
 	}
 
 	// Update is called once per frame
@@ -106,6 +116,11 @@ public class JetPack : MonoBehaviour
 
 		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
+			if (attachedRigidBody.velocity.y < 0)
+			{
+				attachedRigidBody.AddForce(Vector2.up * -attachedRigidBody.velocity.y);
+			}
+
 			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Impulse);
 
 			playerController.NewVelocityForFrame += (Vector2)transform.up * ForceOfJetPack;
@@ -127,6 +142,10 @@ public class JetPack : MonoBehaviour
 
 		HandleAnimations();
 
+		light2D.enabled = UsingJetPack;
+
+		light2D.transform.localPosition = new Vector3((spriteRenderer.flipX ? -lightPos.x : lightPos.x), light2D.transform.localPosition.y, light2D.transform.localPosition.z);
+
 
 		jetPackGuage.TankFill = fuel;
 
@@ -139,5 +158,7 @@ public class JetPack : MonoBehaviour
 	private void HandleAnimations()
 	{
 		playerAnimator.SetBool("IsFlying", UsingJetPack);
+
+
 	}
 }
