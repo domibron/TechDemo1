@@ -15,7 +15,10 @@ public class JetPack : MonoBehaviour
 
 	public float TimeToAllowUse = 0.1f;
 
-	public AudioSource jetPackBeepAudioSource;
+	public float AccelRateFromDecent = 0.8f;
+	public float ReductionFromMaxSpeed = 0.8f;
+
+    public AudioSource jetPackBeepAudioSource;
 
 	public AudioClip jetPackBeep;
 
@@ -113,17 +116,26 @@ public class JetPack : MonoBehaviour
 		}
 
 
+  //      if (Input.GetKeyDown(KeyCode.W) && allowedToUseJetPack && fuel > 0)
+		//{
+  //          if (attachedRigidBody.velocity.normalized.y < 0)
+  //          {
+  //              attachedRigidBody.AddForce((Vector2.up * (-attachedRigidBody.velocity.y)) * AccelRateFromDecent, ForceMode2D.Force);
+  //          }
+  //      }
 
-		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
+        if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
-			if (attachedRigidBody.velocity.y < 0)
+			Vector2 additionalForce = Vector2.zero;
+
+			if (attachedRigidBody.velocity.y > (Vector2.up * ForceOfJetPack).y)
 			{
-				attachedRigidBody.AddForce(Vector2.up * -attachedRigidBody.velocity.y);
-			}
+				additionalForce.y = ((Vector2.up * ForceOfJetPack).y - (attachedRigidBody.velocity.y + ForceOfJetPack)) * ReductionFromMaxSpeed;
 
-			attachedRigidBody.AddForce(((Vector2)transform.up * ForceOfJetPack), ForceMode2D.Impulse);
+            }
 
-			playerController.NewVelocityForFrame += (Vector2)transform.up * ForceOfJetPack;
+			attachedRigidBody.AddForce((Vector2.up * ForceOfJetPack + additionalForce), ForceMode2D.Impulse);
+
 
 			fuel -= Time.deltaTime * FuelUsageRate;
 

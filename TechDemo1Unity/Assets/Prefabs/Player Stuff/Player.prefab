@@ -49,6 +49,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -100,6 +102,7 @@ GameObject:
   - component: {fileID: 2589053844684493573}
   - component: {fileID: 7988897793442955508}
   - component: {fileID: 5576016986945924946}
+  - component: {fileID: 1611437849947239605}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -202,12 +205,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6c80b10b7bcb547aa0b2ba0835b792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LockMovement: 0
   MaxSpeed: 5
   AccelRate: 0.8
   DeaccelRate: 0.8
   JumpForce: 7
-  VelocityForFrame: {x: 0, y: 0}
-  NewVelocityForFrame: {x: 0, y: 0}
 --- !u!114 &6689490134600996197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,10 +223,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanUseJetPack: 0
-  ForceOfJetPack: 0.1
+  ForceOfJetPack: 1
   MaxFuel: 10
   FuelUsageRate: 1
   TimeToAllowUse: 0.1
+  AccelRateFromDecent: 0.8
+  ReductionFromMaxSpeed: 0.2
   jetPackBeepAudioSource: {fileID: 250535694163037400}
   jetPackBeep: {fileID: 8300000, guid: dcd44ff19b3671d40b9d35e2bf45e45f, type: 3}
   jetPackGuage: {fileID: 0}
@@ -271,6 +275,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -325,6 +331,59 @@ MonoBehaviour:
   PickUpRange: 1
   Returning: 1
   hasBoomerang: 1
+--- !u!114 &1611437849947239605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697477557382360916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -1, y: -1, z: 0}
+  - {x: -1, y: 1, z: 0}
+  - {x: 1, y: 1, z: 0}
+  - {x: 1, y: -1, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 4668151112407592484}
+  m_ShadowShape2DProvider:
+    rid: 7653724868420567106
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0.16000366, y: 0.90823364, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.09
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.09
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 2
+  m_PreviousShadowShape2DSource: {fileID: 4668151112407592484}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7653724868420567106
+      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
 --- !u!1 &4400708154591455902
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +427,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 495e4bf26ab365e4fbfd1718f94807fe, type: 3}
+  m_Resource: {fileID: 8300000, guid: 495e4bf26ab365e4fbfd1718f94807fe, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.3
   m_Pitch: 1
@@ -496,6 +556,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: dcd44ff19b3671d40b9d35e2bf45e45f, type: 3}
+  m_Resource: {fileID: 8300000, guid: dcd44ff19b3671d40b9d35e2bf45e45f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.1
   m_Pitch: 1

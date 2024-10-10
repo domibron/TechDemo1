@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+	public bool LockMovement = false;
+
 	public float MaxSpeed = 5f;
 	public float AccelRate = 0.7f;
 	public float DeaccelRate = 0.7f;
 
 
 	public float JumpForce = 10f;
-
-	public Vector2 VelocityForFrame;
-	public Vector2 NewVelocityForFrame;
 
 	private Rigidbody2D attachedRigidBody;
 
@@ -42,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		NewVelocityForFrame = Vector2.zero;
+		if (LockMovement) return;
+
 
 		if (CameraMovement.Instance.CameraIsMoving)
 		{
@@ -69,8 +69,6 @@ public class PlayerController : MonoBehaviour
 		PassPlayerPositionToCameraMovement();
 
 		HandleAnimations(InputVector);
-
-		VelocityForFrame = NewVelocityForFrame;
 	}
 
 	// private void HandleGravity()
@@ -129,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
 			// if (!IgnoreRBVelocity) 
 			attachedRigidBody.AddForce(new Vector2(0, JumpForce) + counterGrav, ForceMode2D.Impulse);
-			NewVelocityForFrame += new Vector2(0, JumpForce) + counterGrav;
+
 		}
 	}
 
@@ -167,10 +165,9 @@ public class PlayerController : MonoBehaviour
 
 
 
-		NewVelocityForFrame += forceToApply;
-
 		// if (!IgnoreRBVelocity) 
 		attachedRigidBody.AddForce(forceToApply);
+
 	}
 
 	private bool CheckIfGrounded()
