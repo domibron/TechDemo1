@@ -18,7 +18,7 @@ public class JetPack : MonoBehaviour
 	public float AccelRateFromDecent = 0.8f;
 	public float ReductionFromMaxSpeed = 0.8f;
 
-    public AudioSource jetPackBeepAudioSource;
+	public AudioSource jetPackBeepAudioSource;
 
 	public AudioClip jetPackBeep;
 
@@ -31,6 +31,8 @@ public class JetPack : MonoBehaviour
 	public bool UsingJetPack = false;
 
 	public Light2D light2D;
+
+	public bool Locked = false;
 
 	private Animator playerAnimator;
 	private Rigidbody2D attachedRigidBody;
@@ -71,6 +73,13 @@ public class JetPack : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (Locked)
+		{
+			UsingJetPack = false;
+			allowedToUseJetPack = false;
+			return;
+		}
+
 		// from here
 
 		if (CanUseJetPack && !allowedToUseJetPack && countDown <= 0)
@@ -116,15 +125,15 @@ public class JetPack : MonoBehaviour
 		}
 
 
-  //      if (Input.GetKeyDown(KeyCode.W) && allowedToUseJetPack && fuel > 0)
+		//      if (Input.GetKeyDown(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		//{
-  //          if (attachedRigidBody.velocity.normalized.y < 0)
-  //          {
-  //              attachedRigidBody.AddForce((Vector2.up * (-attachedRigidBody.velocity.y)) * AccelRateFromDecent, ForceMode2D.Force);
-  //          }
-  //      }
+		//          if (attachedRigidBody.velocity.normalized.y < 0)
+		//          {
+		//              attachedRigidBody.AddForce((Vector2.up * (-attachedRigidBody.velocity.y)) * AccelRateFromDecent, ForceMode2D.Force);
+		//          }
+		//      }
 
-        if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
+		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
 		{
 			Vector2 additionalForce = Vector2.zero;
 
@@ -132,7 +141,7 @@ public class JetPack : MonoBehaviour
 			{
 				additionalForce.y = ((Vector2.up * ForceOfJetPack).y - (attachedRigidBody.velocity.y + ForceOfJetPack)) * ReductionFromMaxSpeed;
 
-            }
+			}
 
 			attachedRigidBody.AddForce((Vector2.up * ForceOfJetPack + additionalForce), ForceMode2D.Impulse);
 

@@ -14,11 +14,11 @@ public class Ladder : MonoBehaviour
 
 	public bool playerAbove = false;
 
+	public float HeightOfLadder = 0f;
+
 	private SpriteRenderer spriteRenderer;
 
 	private BoxCollider2D boxCollider;
-
-	private float heightOfLadder = 0f;
 
 	private bool playerNearLadder = false;
 
@@ -41,7 +41,7 @@ public class Ladder : MonoBehaviour
 
 		AboveCheck.localPosition = new Vector3(0, height, 0);
 
-		heightOfLadder = boxCollider.size.y;
+		HeightOfLadder = boxCollider.size.y;
 	}
 
 	// Update is called once per frame
@@ -56,33 +56,33 @@ public class Ladder : MonoBehaviour
 		}
 		else if (playerAbove && Input.GetKeyDown(KeyCode.S) && !ladderMovementController.IsPlayerOnLadder)
 		{
-			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder());
+			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder() - Vector3.up * 0.2f, transform.position, boxCollider.size.y);
 		}
-		else if (!boxCollider.isTrigger)
+		else if ((!playerAbove) || ladderMovementController.IsPlayerOnLadder)
 		{
 			boxCollider.isTrigger = true;
 		}
 
 
-		if (playerNearLadder && Input.GetKeyUp(KeyCode.W) && !ladderMovementController.IsPlayerOnLadder)
+		if (playerNearLadder && Input.GetKeyUp(KeyCode.W) && !ladderMovementController.IsPlayerOnLadder && !playerAbove)
 		{
-			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder());
+			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder(), transform.position, boxCollider.size.y);
 		}
+
+
 	}
 
 	private Vector3 CalcPlayerTargetPositionOnLadder()
 	{
 		Vector3 targ = playerTransform.position - transform.position;
 
-		targ.y -= 1f;
-
-		if (targ.y < transform.position.y - (heightOfLadder / 2f) + 1f)
+		if (playerTransform.position.y < transform.position.y - (HeightOfLadder / 2f))
 		{
-			targ.y = transform.position.y - (heightOfLadder / 2f) + 1f;
+			targ.y = transform.position.y - (HeightOfLadder / 2f) + .9f;
 		}
-		else if (targ.y > transform.position.y + (heightOfLadder / 2f) + 1f)
+		else if (playerTransform.position.y > transform.position.y + (HeightOfLadder / 2f))
 		{
-			targ.y = transform.position.y + (heightOfLadder / 2f) + 1f;
+			targ.y = transform.position.y + (HeightOfLadder / 2f) + .9f;
 		}
 		else
 		{
@@ -96,11 +96,6 @@ public class Ladder : MonoBehaviour
 		return targ;
 	}
 
-	void OnDrawGizmos()
-	{
-		Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - (heightOfLadder / 2f) + 1f, transform.position.z), 0.5f);
-		Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + (heightOfLadder / 2f) + 1f, transform.position.z), 0.5f);
-	}
 
 	void OnTriggerEnter2D(Collider2D other)
 	{

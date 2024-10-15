@@ -8,7 +8,14 @@ public class LadderMovementController : MonoBehaviour
 
 	private PlayerController playerController;
 
+	private JetPack jetPack;
+
 	private Rigidbody2D attachedRigidbody;
+
+	private float playerHeight;
+
+	private Vector3 ladderPos;
+	private float ladderHeight;
 
 	// Start is called before the first frame update
 	void Start()
@@ -16,6 +23,10 @@ public class LadderMovementController : MonoBehaviour
 		playerController = GetComponent<PlayerController>();
 
 		attachedRigidbody = GetComponent<Rigidbody2D>();
+
+		jetPack = GetComponent<JetPack>();
+
+		playerHeight = GetComponent<CapsuleCollider2D>().size.y;
 	}
 
 	// Update is called once per frame
@@ -23,28 +34,47 @@ public class LadderMovementController : MonoBehaviour
 	{
 		if (!IsPlayerOnLadder) return;
 
+		if (jetPack.UsingJetPack)
+		{
+			DismountLadder();
+			return;
+		}
+
 		Vector2 moveDir = PlayerController.GetInputAsVector2();
 
 		moveDir.Normalize();
 
+
+		if (moveDir.x != 0)
+		{
+			DismountLadder();
+		}
+
+		if (transform.position.y > (ladderPos.y + playerHeight / 2f) + (ladderHeight / 2f) || transform.position.y < (ladderPos.y + playerHeight / 2f) - (ladderHeight / 2f))
+		{
+			DismountLadder();
+		}
+
 		if (moveDir.y != 0)
 		{
+
 			attachedRigidbody.AddForce(((Vector2.up * moveDir.y * playerController.MaxSpeed) - attachedRigidbody.velocity) * playerController.AccelRate);
+
 		}
 		else
 		{
 			attachedRigidbody.AddForce(new Vector2(0, -attachedRigidbody.velocity.y) * playerController.DeaccelRate);
 		}
 
-		// add delay
-		if (moveDir.x != 0)
-		{
-			DismountLadder();
-		}
+
 	}
 
-	public void MountLadder(Vector3 posToTeleport)
+	public void MountLadder(Vector3 posToTeleport, Vector3 ladderPosition, float ladderFullHeight)
 	{
+		if (jetPack.UsingJetPack) return;
+
+		transform.position = posToTeleport;
+
 		IsPlayerOnLadder = true;
 
 		playerController.LockMovement = true;
@@ -53,7 +83,11 @@ public class LadderMovementController : MonoBehaviour
 
 		attachedRigidbody.velocity = Vector2.zero;
 
-		transform.position = posToTeleport;
+		jetPack.Locked = true;
+
+		ladderPos = ladderPosition;
+
+		ladderHeight = ladderFullHeight;
 	}
 
 	public void DismountLadder()
@@ -63,5 +97,8 @@ public class LadderMovementController : MonoBehaviour
 		playerController.LockMovement = false;
 
 		attachedRigidbody.gravityScale = 1;
+
+		jetPack.Locked = false;
+
 	}
 }
