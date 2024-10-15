@@ -105,6 +105,9 @@ public class PlayerController : MonoBehaviour
 			spriteRenderer.flipX = false;
 		}
 
+		animator.SetBool("Falling", attachedRigidBody.velocityY < 0 && !isGrounded);
+
+
 	}
 
 	private void PassPlayerPositionToCameraMovement()
@@ -129,6 +132,7 @@ public class PlayerController : MonoBehaviour
 			// if (!IgnoreRBVelocity) 
 			attachedRigidBody.AddForce(new Vector2(0, JumpForce) + counterGrav, ForceMode2D.Impulse);
 
+			animator.SetTrigger("Jump");
 		}
 	}
 

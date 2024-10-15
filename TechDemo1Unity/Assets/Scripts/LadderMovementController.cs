@@ -17,6 +17,8 @@ public class LadderMovementController : MonoBehaviour
 	private Vector3 ladderPos;
 	private float ladderHeight;
 
+	private bool stopDismount = false;
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -50,16 +52,14 @@ public class LadderMovementController : MonoBehaviour
 			DismountLadder();
 		}
 
-		if (transform.position.y > (ladderPos.y + playerHeight / 2f) + (ladderHeight / 2f) || transform.position.y < (ladderPos.y + playerHeight / 2f) - (ladderHeight / 2f))
+		if (((transform.position.y > (ladderPos.y + playerHeight / 2f) + (ladderHeight / 2f) && !Input.GetKey(KeyCode.S)) || (transform.position.y < (ladderPos.y + playerHeight / 2f) - (ladderHeight / 2f))) && IsPlayerOnLadder)
 		{
 			DismountLadder();
 		}
 
 		if (moveDir.y != 0)
 		{
-
 			attachedRigidbody.AddForce(((Vector2.up * moveDir.y * playerController.MaxSpeed) - attachedRigidbody.velocity) * playerController.AccelRate);
-
 		}
 		else
 		{
@@ -72,6 +72,12 @@ public class LadderMovementController : MonoBehaviour
 	public void MountLadder(Vector3 posToTeleport, Vector3 ladderPosition, float ladderFullHeight)
 	{
 		if (jetPack.UsingJetPack) return;
+
+		if (stopDismount == false)
+		{
+			StartCoroutine(StopDismontDelay());
+		}
+
 
 		transform.position = posToTeleport;
 
@@ -90,8 +96,17 @@ public class LadderMovementController : MonoBehaviour
 		ladderHeight = ladderFullHeight;
 	}
 
+	IEnumerator StopDismontDelay()
+	{
+		stopDismount = true;
+		yield return new WaitForSeconds(0.05f);
+		stopDismount = false;
+	}
+
 	public void DismountLadder()
 	{
+		if (stopDismount) return;
+
 		IsPlayerOnLadder = false;
 
 		playerController.LockMovement = false;

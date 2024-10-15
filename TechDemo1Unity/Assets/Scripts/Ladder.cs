@@ -56,7 +56,8 @@ public class Ladder : MonoBehaviour
 		}
 		else if (playerAbove && Input.GetKeyDown(KeyCode.S) && !ladderMovementController.IsPlayerOnLadder)
 		{
-			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder() - Vector3.up * 0.2f, transform.position, boxCollider.size.y);
+			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder(), transform.position, boxCollider.size.y);
+			boxCollider.isTrigger = true;
 		}
 		else if ((!playerAbove) || ladderMovementController.IsPlayerOnLadder)
 		{
@@ -68,6 +69,7 @@ public class Ladder : MonoBehaviour
 		{
 			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder(), transform.position, boxCollider.size.y);
 		}
+
 
 
 	}

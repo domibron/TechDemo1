@@ -39,7 +39,9 @@ public class JetPack : MonoBehaviour
 	private PlayerController playerController;
 	private SpriteRenderer spriteRenderer;
 
-	private float fuel;
+	public float Fuel;
+
+	public bool SetToMaxFuel = false;
 
 	private bool allowedToUseJetPack = false;
 
@@ -62,7 +64,7 @@ public class JetPack : MonoBehaviour
 
 		lightPos = light2D.transform.localPosition;
 
-		fuel = MaxFuel;
+		if (SetToMaxFuel) Fuel = MaxFuel;
 
 		jetPackGuage.MaxTankSize = MaxFuel;
 
@@ -117,9 +119,9 @@ public class JetPack : MonoBehaviour
 			beepDelay -= Time.deltaTime;
 
 		}
-		else if (fuel < MaxFuel * 0.25f && beepDelay <= 0 && allowedToUseJetPack && fuel > 0)
+		else if (Fuel < MaxFuel * 0.25f && beepDelay <= 0 && allowedToUseJetPack && Fuel > 0)
 		{
-			beepDelay = Mathf.Lerp(0.1f, BeepInterval, fuel / (MaxFuel * 0.25f));
+			beepDelay = Mathf.Lerp(0.1f, BeepInterval, Fuel / (MaxFuel * 0.25f));
 
 			jetPackBeepAudioSource.PlayOneShot(jetPackBeep);
 		}
@@ -133,7 +135,7 @@ public class JetPack : MonoBehaviour
 		//          }
 		//      }
 
-		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && fuel > 0)
+		if (Input.GetKey(KeyCode.W) && allowedToUseJetPack && Fuel > 0)
 		{
 			Vector2 additionalForce = Vector2.zero;
 
@@ -146,7 +148,7 @@ public class JetPack : MonoBehaviour
 			attachedRigidBody.AddForce((Vector2.up * ForceOfJetPack + additionalForce), ForceMode2D.Impulse);
 
 
-			fuel -= Time.deltaTime * FuelUsageRate;
+			Fuel -= Time.deltaTime * FuelUsageRate;
 
 
 
@@ -168,9 +170,9 @@ public class JetPack : MonoBehaviour
 		light2D.transform.localPosition = new Vector3((spriteRenderer.flipX ? -lightPos.x : lightPos.x), light2D.transform.localPosition.y, light2D.transform.localPosition.z);
 
 
-		jetPackGuage.TankFill = fuel;
+		jetPackGuage.TankFill = Fuel;
 
-		if (fuel < MaxFuel * 0.25f)
+		if (Fuel < MaxFuel * 0.25f)
 		{
 			jetPackGuage.LowFuel = true;
 		}
