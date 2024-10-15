@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	public float DeaccelRate = 0.7f;
 
 
+
 	public float JumpForce = 10f;
 
 	private Rigidbody2D attachedRigidBody;
@@ -131,7 +132,7 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private static Vector2 GetInputAsVector2()
+	public static Vector2 GetInputAsVector2()
 	{
 		return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 	}
