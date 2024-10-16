@@ -82,6 +82,8 @@ public class JetPack : MonoBehaviour
 			return;
 		}
 
+		if (Fuel > MaxFuel) Fuel = MaxFuel;
+
 		// from here
 
 		if (CanUseJetPack && !allowedToUseJetPack && countDown <= 0)
@@ -175,6 +177,10 @@ public class JetPack : MonoBehaviour
 		if (Fuel < MaxFuel * 0.25f)
 		{
 			jetPackGuage.LowFuel = true;
+		}
+		else if (Fuel > MaxFuel * 0.25f)
+		{
+			jetPackGuage.LowFuel = false;
 		}
 	}
 

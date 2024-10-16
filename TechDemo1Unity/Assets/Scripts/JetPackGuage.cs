@@ -39,6 +39,13 @@ public class JetPackGuage : MonoBehaviour
 
 		GuageTransform.GetComponent<RectTransform>().localPosition = Vector2.Lerp(EmptyPosition, FullPosition, (TankFill / MaxTankSize));
 
+		if (!LowFuel && TankFill >= MaxTankSize * 0.25f)
+		{
+			blinkingLight = false;
+			StopCoroutine(BlinkLight());
+			LightImage.sprite = LightOffSprite;
+		}
+
 		if (!blinkingLight && LowFuel && TankFill > 0)
 		{
 			StartCoroutine(BlinkLight());

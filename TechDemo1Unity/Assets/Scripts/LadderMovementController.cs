@@ -115,5 +115,10 @@ public class LadderMovementController : MonoBehaviour
 
 		jetPack.Locked = false;
 
+		if (Mathf.Abs(transform.position.y - (ladderPos.y + playerHeight / 2f) + (ladderHeight / 2f)) < 0.3f)
+		{
+			attachedRigidbody.velocityY = 2f;
+		}
+
 	}
 }

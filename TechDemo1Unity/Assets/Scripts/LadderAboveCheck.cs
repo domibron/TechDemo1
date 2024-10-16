@@ -58,7 +58,7 @@ public class LadderAboveCheck : MonoBehaviour
 	{
 		if (other.transform.CompareTag("Player"))
 		{
-			if (player.position.y - (playerHeight / 2f) > ladder.transform.position.y + (ladder.HeightOfLadder / 2f))
+			if (player.position.y - (playerHeight / 2f) > ladder.transform.position.y + (ladder.HeightOfLadder / 2f) && Vector3.Distance(transform.position, player.position) < 0.75f)
 			{
 				ladder.playerAbove = true;
 			}
