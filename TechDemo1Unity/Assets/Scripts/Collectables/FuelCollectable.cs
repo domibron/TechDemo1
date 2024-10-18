@@ -11,10 +11,20 @@ public class FuelCollectable : MonoBehaviour
 	[Range(0, 1)]
 	public float PercentageFill = 0.1f;
 
+	public bool Reusable = false;
+
+	public float RespawnTime = 15f;
+
+	private bool running = false;
+
+	private SpriteRenderer spriteRenderer;
+	private Collider2D attachedCollider2D;
+
 	// Start is called before the first frame update
 	void Start()
 	{
-
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		attachedCollider2D = GetComponent<Collider2D>();
 	}
 
 	// Update is called once per frame
@@ -47,7 +57,29 @@ public class FuelCollectable : MonoBehaviour
 				else jetPack.Fuel += jetPack.MaxFuel * PercentageFill;
 			}
 
-			Destroy(gameObject);
+			if (!Reusable) Destroy(gameObject);
+			else
+			{
+				if (!running)
+				{
+					StartCoroutine(Respawn());
+				}
+			}
 		}
+	}
+
+	private IEnumerator Respawn()
+	{
+		running = true;
+
+		attachedCollider2D.enabled = false;
+		spriteRenderer.enabled = false;
+
+		yield return new WaitForSeconds(RespawnTime);
+
+		attachedCollider2D.enabled = true;
+		spriteRenderer.enabled = true;
+
+		running = false;
 	}
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LadderMovementController : MonoBehaviour
 {
+	public bool IsLadderMovementLocked = false;
+
 	public bool IsPlayerOnLadder = false;
 
 	private PlayerController playerController;
@@ -34,6 +36,8 @@ public class LadderMovementController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (IsLadderMovementLocked) return;
+
 		if (!IsPlayerOnLadder) return;
 
 		if (jetPack.UsingJetPack)

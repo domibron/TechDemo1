@@ -12,6 +12,8 @@ public class CameraMovement : MonoBehaviour
 
 	private Camera cam;
 
+	int screenWidth = 1500;
+	int screenHeight = 1000;
 
 	void Awake()
 	{
@@ -29,6 +31,7 @@ public class CameraMovement : MonoBehaviour
 	void Start()
 	{
 		cam = Camera.main;
+
 
 	}
 
@@ -76,7 +79,10 @@ public class CameraMovement : MonoBehaviour
 			cameraToBaseOff = Camera.main;
 		}
 
-		Vector3 returnedPosition = cameraToBaseOff.ScreenToWorldPoint(new Vector3(((Screen.width + buffer.x) * direction.x) + Screen.width / 2f, ((Screen.height + buffer.y) * direction.y) + Screen.height / 2f, 0), Camera.MonoOrStereoscopicEye.Mono);
+
+
+
+		Vector3 returnedPosition = cameraToBaseOff.ScreenToWorldPoint(new Vector3(((screenWidth + buffer.x) * direction.x) + screenWidth / 2f, ((screenHeight + buffer.y) * direction.y) + screenHeight / 2f, 0), Camera.MonoOrStereoscopicEye.Mono);
 
 
 
@@ -91,7 +97,7 @@ public class CameraMovement : MonoBehaviour
 
 		Vector3 posAtScreen = cam.WorldToScreenPoint(PlayerPosition);
 
-		if (posAtScreen.x > Screen.width)
+		if (posAtScreen.x > screenWidth)
 		{
 			camMoveDir.x = 1;
 		}
@@ -101,7 +107,7 @@ public class CameraMovement : MonoBehaviour
 		}
 
 
-		if (posAtScreen.y > Screen.height)
+		if (posAtScreen.y > screenHeight)
 		{
 			camMoveDir.y = 1;
 		}
