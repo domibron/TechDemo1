@@ -5,39 +5,42 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public GameObject AreYouSurePopUp;
+	public GameObject AreYouSurePopUp;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        ClosePopUp();
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		ClosePopUp();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+	}
 
-    public void StartGame(int sceneID)
-    {
-        SceneManager.LoadScene(sceneID);
-    }
+	// Update is called once per frame
+	void Update()
+	{
 
-    public void QuitButtonPressed()
-    {
-        AreYouSurePopUp.SetActive(true);
-    }
+	}
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+	public void StartGame(int sceneID)
+	{
+		SceneManager.LoadScene(sceneID);
+	}
 
-    public void ClosePopUp()
-    {
-        AreYouSurePopUp.SetActive(false);
-    }
+	public void QuitButtonPressed()
+	{
+		AreYouSurePopUp.SetActive(true);
+	}
+
+	public void QuitGame()
+	{
+		Application.Quit();
+	}
+
+	public void ClosePopUp()
+	{
+		AreYouSurePopUp.SetActive(false);
+	}
 
 
 }

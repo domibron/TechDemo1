@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LadderAboveCheck : MonoBehaviour
 {
-	private Ladder ladder;
+	public Ladder ladder;
 
 	private float playerHeight;
 
@@ -13,7 +13,7 @@ public class LadderAboveCheck : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		ladder = GetComponentInParent<Ladder>();
+		//ladder = GetComponentInParent<Ladder>();
 	}
 
 	// Update is called once per frame
@@ -22,7 +22,8 @@ public class LadderAboveCheck : MonoBehaviour
 		if (player == null) return;
 
 
-		if (player.position.y - (playerHeight / 2f) > ladder.transform.position.y + (ladder.HeightOfLadder / 2f))
+		if (player.position.y - (playerHeight / 2f) > ladder.transform.position.y + (ladder.HeightOfLadder / 2f) && player.position.y - (playerHeight / 2f) < ladder.transform.position.y + (ladder.HeightOfLadder / 2f) + 1f &&
+		player.position.x < ladder.transform.position.x + (ladder.WidthOfLadder / 2f) && player.position.x > ladder.transform.position.x - (ladder.WidthOfLadder / 2f))
 		{
 			ladder.playerAbove = true;
 		}

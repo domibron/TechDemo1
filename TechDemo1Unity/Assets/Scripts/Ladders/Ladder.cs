@@ -14,12 +14,15 @@ public class Ladder : MonoBehaviour
 	public bool playerAbove = false;
 
 	public float HeightOfLadder = 0f;
+	public float WidthOfLadder = 0f;
 
 	private SpriteRenderer spriteRenderer;
 
 	private BoxCollider2D boxCollider;
 
 	private bool playerNearLadder = false;
+
+	private CapsuleCollider2D playerCollider;
 
 	// Start is called before the first frame update
 	void Start()
@@ -41,6 +44,7 @@ public class Ladder : MonoBehaviour
 		AboveCheck.localPosition = new Vector3(0, height, 0);
 
 		HeightOfLadder = boxCollider.size.y;
+		WidthOfLadder = boxCollider.size.x;
 	}
 
 	// Update is called once per frame
@@ -64,6 +68,11 @@ public class Ladder : MonoBehaviour
 		}
 
 
+		if (Input.GetKeyUp(KeyCode.W) && !ladderMovementController.IsPlayerOnLadder && !playerAbove)
+		{
+			playerNearLadder = PlayerInLadderBounds();
+		}
+
 		if (playerNearLadder && Input.GetKeyUp(KeyCode.W) && !ladderMovementController.IsPlayerOnLadder && !playerAbove)
 		{
 			ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder(), transform.position, boxCollider.size.y);
@@ -71,6 +80,32 @@ public class Ladder : MonoBehaviour
 
 
 
+	}
+
+	private bool PlayerInLadderBounds()
+	{
+		if (playerCollider == null)
+		{
+			return false;
+		}
+
+		Vector3 playerPos = playerTransform.position;
+		playerPos.y -= playerCollider.size.y / 2f;
+
+		float localHeight = HeightOfLadder / 2f;
+		float localWidth = WidthOfLadder / 2f;
+
+		if (playerPos.y < transform.position.y + localHeight && playerPos.y > transform.position.y - localHeight &&
+		playerPos.x < transform.position.x + localWidth && playerPos.x > transform.position.x - localWidth)
+		{
+			print("T");
+			return true;
+		}
+		else
+		{
+			print("F");
+			return false;
+		}
 	}
 
 	private Vector3 CalcPlayerTargetPositionOnLadder()
@@ -103,7 +138,8 @@ public class Ladder : MonoBehaviour
 		if (other.transform.CompareTag("Player"))
 		{
 			if (ladderMovementController == null) ladderMovementController = other.GetComponent<LadderMovementController>();
-			if (ladderMovementController != null) playerTransform = ladderMovementController.transform;
+			if (playerTransform == null) playerTransform = other.transform;
+			if (playerTransform != null) playerCollider = playerTransform.GetComponent<CapsuleCollider2D>();
 
 			playerNearLadder = true;
 			// ladderMovementController.MountLadder(CalcPlayerTargetPositionOnLadder());

@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
 	private void HandleJumping()
 	{
-		if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+		if (Input.GetKeyDown(KeyCode.W) && isGrounded && attachedRigidBody.velocityY <= 0)
 		{
 			Vector2 counterGrav = attachedRigidBody.velocity;
 

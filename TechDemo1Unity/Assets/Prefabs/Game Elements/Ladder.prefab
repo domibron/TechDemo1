@@ -243,3 +243,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb944ab8e690b4647bdeeb915e531d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ladder: {fileID: 7052091862078358927}
